@@ -1,5 +1,5 @@
 #include <SFML/Graphics.hpp>
-
+#include <iostream>
 // HELLO WORLD
 
 /*int main(){
@@ -47,12 +47,13 @@ Font font;
 Text text;
 int score1 = 0;
 int score2 = 0;
+bool AI = true;
 
 
 void Load()
 {
 	// Load font
-	font.loadFromFile("res/fonts/Roboto-Regular.ttf");
+	font.loadFromFile("bin/debug/res/fonts/Roboto-Regular.ttf");
 	// Set text element to use font
 	text.setFont(font);
 	// Set the character size to 24 pixels
@@ -84,7 +85,7 @@ void Reset()
 {
 	Load();
 	// Update Score Text
-	text.setString(score1 + ":" + score2);
+	text.setString(to_string(score1) + " : " + to_string(score2));
 	// Keep Score Text Centered
 	text.setPosition((gameWidth * .5f) - (text.getLocalBounds().width * .5f), 0);
 }
@@ -131,13 +132,29 @@ void Update(RenderWindow &window)
 		paddles[0].setPosition(paddles[0].getPosition().x, paddleSize.y / 2);
 	}
 	direction = 0.0f;
-	if (Keyboard::isKeyPressed(controls[2]))
+	// If there is no AI then the player 2 can take the control of the right paddle
+	if (!AI)
 	{
-		direction--;
+		if (Keyboard::isKeyPressed(controls[2]))
+		{
+			direction--;
+		}
+		if (Keyboard::isKeyPressed(controls[3]))
+		{
+			direction++;
+		}
 	}
-	if (Keyboard::isKeyPressed(controls[3]))
+	else
 	{
-		direction++;
+		float AIdirection = (ball.getPosition().y - paddles[1].getPosition().y) / sqrt(pow(ball.getPosition().y, 2) + pow(paddles[1].getPosition().y, 2));
+		if (AIdirection > 0)
+		{
+			direction++;
+		}
+		else
+		{
+			direction--;
+		}
 	}
 	paddles[1].move(0, direction * paddleSpeed * dt);
 	if (paddles[1].getPosition().y + paddleSize.y / 2 > gameHeight)
@@ -152,8 +169,34 @@ void Update(RenderWindow &window)
 	// Check ball collisions
 	const float bx = ball.getPosition().x;
 	const float by = ball.getPosition().y;
+	//Left paddle
+	if (//ball is inline or behind paddle
+		bx < paddles[0].getPosition().x + paddleSize.x / 2 &&
+		//AND ball is below top edge of paddle
+		by > paddles[0].getPosition().y - (paddleSize.y * 0.5) &&
+		//AND ball is above bottom edge of paddle
+		by < paddles[0].getPosition().y + (paddleSize.y * 0.5))
+	{
+		//Bounce off left paddle
+		ballVelocity.x *= -1.1f;
+		ballVelocity.y *= 1.1f;
+		ball.move(0.1, 0);
+	}
+	// Right paddle
+	else if (//ball is inline or behind paddle
+		bx > paddles[1].getPosition().x - paddleSize.x / 2 &&
+		//AND ball is below top edge of paddle
+		by > paddles[1].getPosition().y - (paddleSize.y * 0.5) &&
+		//AND ball is above bottom edge of paddle
+		by < paddles[1].getPosition().y + (paddleSize.y * 0.5))
+	{
+		//Bounce off right paddle
+		ballVelocity.x *= -1.1f;
+		ballVelocity.y *= 1.1f;
+		ball.move(-0.2, 0);
+	}
 	// Bottom wall
-	if (by > gameHeight)
+	else if (by > gameHeight)
 	{
 		ballVelocity.x *= 1.1f;
 		ballVelocity.y *= -1.1f;
@@ -169,37 +212,14 @@ void Update(RenderWindow &window)
 	// Right wall
 	else if (bx > gameWidth)
 	{
+		score1++;
 		Reset();
 	}
 	// Left wall
 	else if (bx < 0)
 	{
+		score2++;
 		Reset();
-	}
-	//Left paddle
-	else if (
-		//ball is inline or behind paddle
-		bx < paddleSize.x &&
-		//AND ball is below top edge of paddle
-		by > paddles[0].getPosition().y - (paddleSize.y * 0.5) &&
-		//AND ball is above bottom edge of paddle
-		by < paddles[0].getPosition().y + (paddleSize.y * 0.5)) 
-	{
-		//Bounce off left paddle
-		ballVelocity.x *= -1.1f;
-		ballVelocity.y *= 1.1f;
-	}
-	// Right paddle
-	else if (//ball is inline or behind paddle
-		bx > paddles[1].getPosition().x - paddleSize.x / 2 &&
-		//AND ball is below top edge of paddle
-		by > paddles[1].getPosition().y - (paddleSize.y * 0.5) &&
-		//AND ball is above bottom edge of paddle
-		by < paddles[1].getPosition().y + (paddleSize.y * 0.5))
-	{
-		//Bounce off right paddle
-		ballVelocity.x *= -1.1f;
-		ballVelocity.y *= 1.1f;
 	}
 	ball.move(ballVelocity * dt);
 }

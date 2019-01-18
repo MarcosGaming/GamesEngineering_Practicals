@@ -1,5 +1,4 @@
 #include <SFML/Graphics.hpp>
-#include <iostream>
 // HELLO WORLD
 
 /*int main(){
@@ -53,7 +52,7 @@ bool AI = true;
 void Load()
 {
 	// Load font
-	font.loadFromFile("bin/debug/res/fonts/Roboto-Regular.ttf");
+	font.loadFromFile("res/fonts/Roboto-Regular.ttf");
 	// Set text element to use font
 	text.setFont(font);
 	// Set the character size to 24 pixels

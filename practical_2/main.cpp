@@ -2,16 +2,33 @@
 #include <iostream>
 #include "ship.h"
 #include "game.h"
+#include "bullet.h"
 
 using namespace sf;
 using namespace std;
 
 Texture spritesheet;
+Font font;
+Text text;
 
 std::vector<Ship *> ships;
+Player* player;
+int invaders_left = invaders_columns * invaders_rows;
+bool gameOver = false;
 
 void Load()
 {
+	// Load font
+	font.loadFromFile("res/fonts/Roboto-Regular.ttf");
+	// Set text element to use font
+	text.setFont(font);
+	// Set the character size to 24 pixels
+	text.setCharacterSize(24);
+	// Set string
+	text.setString("GAME OVER");
+	// Set text position
+	text.setPosition((gameWidth * .5f) - (text.getLocalBounds().width * .5f), gameHeight * 0.5);
+
 	if (!spritesheet.loadFromFile("res/img/invaders_sheet.png"))
 	{
 		cerr << "Failed to load spridesheet" << endl;
@@ -24,11 +41,15 @@ void Load()
 		{
 			Vector2f position = Vector2f(220 + 32*c, 100 +32*r);
 			Invader* inv = new Invader(rect, position);
+			if (r == invaders_rows - 1)
+			{
+				inv->_bottom = true;
+			}
 			ships.push_back(inv);
 		}
 	}
 	
-	Player* player = new Player();
+	player = new Player();
 	ships.push_back(player);
 }
 
@@ -58,14 +79,24 @@ void Update(RenderWindow &window)
 	{
 		s->Update(dt);
 	}
+
+	Bullet::Update(dt);
 }
 
 void Render(RenderWindow &window)
 {
-	// Draw Everything
-	for (const auto s : ships)
+	if (!gameOver)
 	{
-		window.draw(*s);
+		// Draw Everything
+		for (const auto s : ships)
+		{
+			window.draw(*s);
+		}
+		Bullet::Render(window);
+	}
+	else
+	{
+		window.draw(text);
 	}
 }
 

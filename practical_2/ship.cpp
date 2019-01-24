@@ -54,7 +54,7 @@ void Invader::Update(const float &dt)
 	if ((direction && getPosition().x > gameWidth - 16) || (!direction && getPosition().x < 16))
 	{
 		direction = !direction;
-		for (int i = 0; i < ships.size() - 1; i++)
+		for (int i = 0; i < ships.size() - 2; i++)
 		{
 			ships[i]->move(0, 10);
 		}
@@ -65,7 +65,7 @@ void Invader::Update(const float &dt)
 	if (_bottom && firetime <= 0 && rand() % 100 == 0)
 	{
 		Bullet::Fire(getPosition(), true);
-		firetime = 4.0f + (rand() % 60) + invaders_left * 0.1;
+		firetime = (rand() % 60) + invaders_left * 0.1;
 	}
 	if (_exploded)
 	{
@@ -79,11 +79,16 @@ void Invader::Update(const float &dt)
 			ships.erase(ships.begin() + pos);
 		}
 	}
+	if (getPosition().y >= player->getPosition().y)
+	{
+		player->Explode();
+	}
 }
 
 void Invader::Explode()
 {
 	Ship::Explode();
+	score += 10;
 	invaders_left -= 1;
 	_bottom = false;
 	// Set the invader in the upper row as the bottom
@@ -92,6 +97,48 @@ void Invader::Explode()
 	{
 		ships.at(pos - invaders_columns)->_bottom = true;
 	}
+}
+
+//MOTHERSHIP
+
+MotherShip::MotherShip() : Ship() {};
+MotherShip::MotherShip(sf::IntRect ir, sf::Vector2f pos) : Ship(ir) 
+{
+	speed = 120;
+	explosiontime = 0.3f;
+	setOrigin(16, 16);
+	setPosition(pos);
+}
+
+void MotherShip::Update(const float &dt)
+{
+	Ship::Update(dt);
+	move(dt * (direction ? 1.0f : -1.0f) * speed, 0);
+
+	if ((direction && getPosition().x > gameWidth - 32) || (!direction && getPosition().x < 32))
+	{
+		direction = !direction;
+	}
+	if (_exploded)
+	{
+		explosiontime -= dt;
+		if (explosiontime <= 0)
+		{
+			setTextureRect(IntRect(0, 0, 0, 0));
+			// Remove the invader
+			setPosition(gameWidth * 0.5, 50);
+			setTextureRect(IntRect(192, 0, 64, 32));
+			_exploded = false;
+			direction = !direction;
+			explosiontime = 0.3f;
+		}
+	}
+}
+
+void MotherShip::Explode()
+{
+	Ship::Explode();
+	score += 100;
 }
 
 // PLAYER
@@ -105,37 +152,50 @@ Player::Player() : Ship(IntRect(160, 32, 32, 32))
 void Player::Update(const float &dt)
 {
 	Ship::Update(dt);
-	float direction = 0.0f;
-	if (Keyboard::isKeyPressed(Keyboard::D))
+	if (!is_exploded())
 	{
-		direction++;
+		float direction = 0.0f;
+		if (Keyboard::isKeyPressed(Keyboard::D))
+		{
+			direction++;
+		}
+		if (Keyboard::isKeyPressed(Keyboard::A))
+		{
+			direction--;
+		}
+		// Do not allow the player to move beyond the screen
+		if (getPosition().x < 0)
+		{
+			setPosition(0, getPosition().y);
+		}
+		else if (getPosition().x > gameWidth - 32)
+		{
+			setPosition(gameWidth - 32, getPosition().y);
+		}
+		move(dt * direction * speed, 0);
+		// Player shoots
+		static float firetime = 0.0f;
+		firetime -= dt;
+		if (firetime <= 0 && Keyboard::isKeyPressed(Keyboard::W))
+		{
+			Bullet::Fire(getPosition(), false);
+			firetime = 0.6f;
+		}
 	}
-	if (Keyboard::isKeyPressed(Keyboard::A))
+	else
 	{
-		direction--;
+		static float deathtime = 0.8f;
+		deathtime -= dt;
+		if (deathtime <= 0)
+		{
+			gameOver = true;
+		}
 	}
-	// Do not allow the player to move beyond the screen
-	if (getPosition().x < 0)
-	{
-		setPosition(0, getPosition().y);
-	}
-	else if (getPosition().x > gameWidth - 32)
-	{
-		setPosition(gameWidth - 32, getPosition().y);
-	}
-	move(dt * direction * speed, 0);
-	// Player shoots
-	static float firetime = 0.0f;
-	firetime -= dt;
-	if (firetime <= 0 && Keyboard::isKeyPressed(Keyboard::W))
-	{
-		Bullet::Fire(getPosition(), false);
-		firetime = 0.7f;
-	}
+
 }
 
 void Player::Explode()
 {
-	Ship::Explode();
-	gameOver = true;
+	setTextureRect(IntRect(0, 32, 32, 32));
+	_exploded = true;
 }

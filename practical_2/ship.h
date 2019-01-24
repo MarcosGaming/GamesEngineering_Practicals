@@ -37,6 +37,23 @@ public:
 	void Explode();
 };
 
+class MotherShip : public Ship
+{
+public:
+	// Properties
+	bool direction;
+	float speed;
+	float explosiontime;
+
+	// Constructors
+	MotherShip(sf::IntRect ir, sf::Vector2f pos);
+	MotherShip();
+
+	// Methods
+	void Update(const float &dt) override;
+	void Explode() override;
+};
+
 class Player : public Ship
 {
 	// Properties

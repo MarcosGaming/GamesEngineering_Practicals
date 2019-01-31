@@ -8,13 +8,14 @@ using namespace std;
 int gameWidth = 800;
 int gameHeight = 600;
 
-// AS SAM IF THIS IS OKAY OR IF AS BEING SMART POINTERS IT SHOULD BE DIFFERENT??
 Player* player;
 
 void Load()
 {
 	player = new Player();
 }
+
+
 
 void Update(RenderWindow &window)
 {
@@ -37,7 +38,7 @@ void Update(RenderWindow &window)
 	{
 		window.close();
 	}
-	// ASK SAM HOW DOES THIS METHOD WORK EXACTLY
+
 	player->update(dt);
 }
 

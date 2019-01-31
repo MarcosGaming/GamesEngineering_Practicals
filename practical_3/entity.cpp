@@ -14,5 +14,4 @@ void Entity::update(const double dt)
 	_shape->setPosition(_position);
 }
 
-// ASK SAM WHY THE CONSTRUCTO IS IN THIS WAY?? SHOULD NOT IT BE _SHAPE = S??
 Entity::Entity(unique_ptr<Shape> s) : _shape(std::move(s)){}

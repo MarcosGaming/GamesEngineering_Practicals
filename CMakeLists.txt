@@ -51,13 +51,19 @@ foreach(exe ${EXECUTABLES})
 		optimized sfml-window debug sfml-window-d
 		optimized sfml-system debug sfml-system-d
 		optimized sfml-graphics debug sfml-graphics-d
-		optimized sfml-main debug sfml-main-d)
+		optimized sfml-main debug sfml-main-d
+		lib_tile_level_loader )
 	add_dependencies(${exe} sfml-graphics sfml-audio copy_resources)
 endforeach ()
 
-### TILE LOADER LIB
+### TILE LOADER LIBRARY ###
 file(GLOB_RECURSE SOURCE_FILES lib_tile_level_loader/*.cpp lib_tile_level_loader/*.h)
 add_library(lib_tile_level_loader STATIC ${SOURCE_FILES})
 target_include_directories(lib_tile_level_loader INTERFACE "{CMAKE_SOURCE_DIR}/lib_tile_level_loader/")
-target_link_libraries(lib_tile_level_loader sfml-graphics)
+target_link_libraries(lib_tile_level_loader lib_maths sfml-graphics)
+
+### MATHS LIBRARY ###
+add_library(lib_maths INTERFACE)
+target_sources(lib_maths INTERFACE "${CMAKE_SOURCE_DIR}/lib_maths/maths.h")
+target_include_directories(lib_maths INTERFACE "${CMAKE_SOURCE_DIR}/lib_maths" SYSTEM INTERFACE "${SFML_INCS}")
 

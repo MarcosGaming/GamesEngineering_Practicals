@@ -1,4 +1,5 @@
 #pragma once
+
 #include "LevelSystem.h"
 #include <fstream>
 #include <iostream>
@@ -31,26 +32,6 @@ void LevelSystem::setColor(LevelSystem::TILE t, sf::Color c)
 	LevelSystem::_colours.insert(std::pair<LevelSystem::TILE, sf::Color>(t, c));
 }
 
-sf::Vector2f LevelSystem::getTilePosition(sf::Vector2ul p)
-{
-	return (Vector2f(p.x, p.y) * _tileSize)
-}
-
-void LevelSystem::buildSprites()
-{
-	_sprites.clear();
-	for (size_t y = 0; y < LevelSystem::_height; ++y)
-	{
-		for (size_t x = 0; x < LevelSystem::_width; ++x)
-		{
-			auto s = make_unique<sf::RectangleShape>();
-			s->setPosition(getTilePosition({ x, y }));
-			s->setSize(Vector2f(_tileSize, _tileSize));
-			s->setFillColor(getColor(getTile{ x,y }));
-			_sprites.push_back(move(s));
-		}
-	}
-}
 
 void LevelSystem::loadLevelFile(const std::string& path, float tileSize)
 {
@@ -122,5 +103,53 @@ void LevelSystem::loadLevelFile(const std::string& path, float tileSize)
 		std::copy(temp_tiles.begin(), temp_tiles.end(), &_tiles[0]);
 		std::cout << "Level " << path << " Loaded. " << w << "x" << h << std::endl;
 		buildSprites();
+	}
+}
+
+sf::Vector2f LevelSystem::getTilePosition(sf::Vector2ul p)
+{
+	return (Vector2f(p.x, p.y) * _tileSize)
+}
+
+void LevelSystem::buildSprites()
+{
+	_sprites.clear();
+	for (size_t y = 0; y < LevelSystem::_height; ++y)
+	{
+		for (size_t x = 0; x < LevelSystem::_width; ++x)
+		{
+			auto s = make_unique<sf::RectangleShape>();
+			s->setPosition(getTilePosition({ x, y }));
+			s->setSize(Vector2f(_tileSize, _tileSize));
+			s->setFillColor(getColor(getTile{ x,y }));
+			_sprites.push_back(move(s));
+		}
+	}
+}
+
+LevelSystem::TILE LevelSystem::getTile(sf::Vector2ul p)
+{
+	if (p.x > _width || p.y > _height)
+	{
+		throw string("Tile out opf range: ") + to_string(p.x) + "," + to_string(p.y) + ")";
+	}
+	return _tiles[(p.y * _width) + p.x];
+}
+
+LevelSystem::TILE LevelSystem::getTileAt(Vector2f v)
+{
+	auto a = v - _offset;
+	if (a.x < 0 || a.y < 0)
+	{
+		throw string("Tile out of range");
+	}
+	return getTile(Vector2ul((v - _offset) / (_tileSize));
+}
+
+void LevelSystem::render(RenderWindow &window)
+{
+	for (size_t i = 0; i < _width * _height; i++)
+	{
+		window.draw(*_sprites[i]);
 	}
 }

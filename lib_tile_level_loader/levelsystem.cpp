@@ -108,7 +108,7 @@ void LevelSystem::loadLevelFile(const std::string& path, float tileSize)
 
 sf::Vector2f LevelSystem::getTilePosition(sf::Vector2ul p)
 {
-	return (Vector2f(p.x, p.y) * _tileSize)
+	return (Vector2f(p.x, p.y) * _tileSize);
 }
 
 void LevelSystem::buildSprites()
@@ -121,7 +121,7 @@ void LevelSystem::buildSprites()
 			auto s = make_unique<sf::RectangleShape>();
 			s->setPosition(getTilePosition({ x, y }));
 			s->setSize(Vector2f(_tileSize, _tileSize));
-			s->setFillColor(getColor(getTile{ x,y }));
+			s->setFillColor(getColor(getTile({ x,y })));
 			_sprites.push_back(move(s));
 		}
 	}
@@ -143,7 +143,7 @@ LevelSystem::TILE LevelSystem::getTileAt(Vector2f v)
 	{
 		throw string("Tile out of range");
 	}
-	return getTile(Vector2ul((v - _offset) / (_tileSize));
+	return getTile(Vector2ul((v - _offset) / (_tileSize)));
 }
 
 void LevelSystem::render(RenderWindow &window)

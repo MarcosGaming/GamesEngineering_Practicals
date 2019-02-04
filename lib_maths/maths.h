@@ -39,7 +39,7 @@ namespace sf
 		return degrees * pi / 180;
 	}
 	// Rotate a sf::vector by an angle(degrees)
-	template <typename T> Vector2<T> rotate(constVector2<T> &v, const double degrees)
+	template <typename T> Vector2<T> rotate(const Vector2<T> &v, const double degrees)
 	{
 		const double theta = deg2rad(degrees);
 		const double cs = cos(theta);
@@ -47,7 +47,7 @@ namespace sf
 		return {(T)(v.x * cs - v.y * sn), (T)(v.x * sn - v.y * cs)};
 	}
 	// Allow sf::vectors to be cout'ed
-	template <typename T> std::ostream &operator<<(std::ostream &os. const Vecto2<T> &v)
+	template <typename T> std::ostream &operator<<(std::ostream &os, const Vector2<T> &v)
 	{
 		os << '(' << v.x << ',' << v.y << ')';
 		return os;

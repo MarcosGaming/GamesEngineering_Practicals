@@ -5,6 +5,7 @@ class Player : public Entity
 {
 private:
 	float _speed;
+	bool validmove(sf::Vector2f);
 
 public:
 	void update(double dt) override;

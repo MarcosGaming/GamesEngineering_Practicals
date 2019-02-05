@@ -17,12 +17,20 @@ public:
 	static void render(sf::RenderWindow &window);
 	static sf::Color getColor(TILE t);
 	static void setColor(TILE t, sf::Color c);
+	// Return height
+	static size_t getHeight();
+	// Return width
+	static size_t getWidth();
 	// Get tile at grid coordinate
 	static TILE getTile(sf::Vector2ul);
 	// Get Screenspce coordinate of tike
 	static sf::Vector2f getTilePosition(sf::Vector2ul);
 	// Get the tile at screenspace pos
 	static TILE getTileAt(sf::Vector2f);
+	// Return start tile position
+	static sf::Vector2f getStartTilePos();
+	// Return end tile position
+	static sf::Vector2f getEndTilePos();
 
 protected:
 	static std::unique_ptr<TILE[]> _tiles;		// Internal array of tiles

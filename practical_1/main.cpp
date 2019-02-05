@@ -43,7 +43,7 @@ RectangleShape paddles[2];
 Vector2f ballVelocity;
 bool server = false;
 Font font;
-Text text;
+Text textTimer;
 int score1 = 0;
 int score2 = 0;
 bool AI = true;
@@ -54,13 +54,13 @@ void Load()
 	// Load font
 	font.loadFromFile("res/fonts/Roboto-Regular.ttf");
 	// Set text element to use font
-	text.setFont(font);
+	textTimer.setFont(font);
 	// Set the character size to 24 pixels
-	text.setCharacterSize(24);
+	textTimer.setCharacterSize(24);
 	// Set string
-	text.setString("0 : 0");
+	textTimer.setString("0 : 0");
 	// Keep Score Text Centered
-	text.setPosition((gameWidth * .5f) - (text.getLocalBounds().width * .5f), 0);
+	textTimer.setPosition((gameWidth * .5f) - (textTimer.getLocalBounds().width * .5f), 0);
 
 	// Set size and origin of paddles
 	for (auto &p : paddles)
@@ -84,9 +84,9 @@ void Reset()
 {
 	Load();
 	// Update Score Text
-	text.setString(to_string(score1) + " : " + to_string(score2));
+	textTimer.setString(to_string(score1) + " : " + to_string(score2));
 	// Keep Score Text Centered
-	text.setPosition((gameWidth * .5f) - (text.getLocalBounds().width * .5f), 0);
+	textTimer.setPosition((gameWidth * .5f) - (textTimer.getLocalBounds().width * .5f), 0);
 }
 
 void Update(RenderWindow &window) 
@@ -229,7 +229,7 @@ void Render(RenderWindow &window)
 	window.draw(paddles[0]);
 	window.draw(paddles[1]);
 	window.draw(ball);
-	window.draw(text);
+	window.draw(textTimer);
 }
 
 int main() 

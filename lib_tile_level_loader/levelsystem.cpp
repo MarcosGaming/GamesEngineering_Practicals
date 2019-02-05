@@ -11,11 +11,21 @@ std::unique_ptr<LevelSystem::TILE[]> LevelSystem::_tiles;
 size_t LevelSystem::_width;
 size_t LevelSystem::_height;
 Vector2f LevelSystem::_offset(0.0f, 30.0f);
-
 float LevelSystem::_tileSize(100.0f);
+std::map<LevelSystem::TILE, sf::Color> LevelSystem::_colours{ {START, Color::Blue},{ WALL, Color::White },{ END, Color::Red } };
+
 vector<std::unique_ptr<sf::RectangleShape>> LevelSystem::_sprites;
 
-std::map<LevelSystem::TILE, sf::Color> LevelSystem::_colours{ {WALL, Color::White}, {END, Color::Red} };
+
+size_t LevelSystem::getHeight()
+{
+	return _height;
+}
+
+size_t LevelSystem::getWidth()
+{
+	return _width;
+}
 
 sf::Color LevelSystem::getColor(LevelSystem::TILE t)
 {
@@ -78,7 +88,7 @@ void LevelSystem::loadLevelFile(const std::string& path, float tileSize)
 		case 'n':
 			temp_tiles.push_back(ENEMY);
 			break;
-		// end of line
+			// end of line
 		case '\n':
 			// If width has not been written yet
 			if (w == 0)
@@ -93,17 +103,17 @@ void LevelSystem::loadLevelFile(const std::string& path, float tileSize)
 			// Do not know what this tile type is
 			std::cout << c << endl;
 		}
-		if (temp_tiles.size() != (w * h))
-		{
-			throw string("Can't parse level file") + path;
-		}
-		_tiles = std::make_unique<TILE[]>(w * h);
-		_width = w;
-		_height = h;
-		std::copy(temp_tiles.begin(), temp_tiles.end(), &_tiles[0]);
-		std::cout << "Level " << path << " Loaded. " << w << "x" << h << std::endl;
-		buildSprites();
 	}
+	if (temp_tiles.size() != (w * h))
+	{
+		throw string("Can't parse level file") + path;
+	}
+	_tiles = std::make_unique<TILE[]>(w * h);
+	_width = w;
+	_height = h;
+	std::copy(temp_tiles.begin(), temp_tiles.end(), &_tiles[0]);
+	std::cout << "Level " << path << " Loaded. " << w << "x" << h << std::endl;
+	buildSprites();
 }
 
 sf::Vector2f LevelSystem::getTilePosition(sf::Vector2ul p)
@@ -121,7 +131,7 @@ void LevelSystem::buildSprites()
 			auto s = make_unique<sf::RectangleShape>();
 			s->setPosition(getTilePosition({ x, y }));
 			s->setSize(Vector2f(_tileSize, _tileSize));
-			s->setFillColor(getColor(getTile({ x,y })));
+			s->setFillColor(getColor(getTile({ x, y })));
 			_sprites.push_back(move(s));
 		}
 	}
@@ -151,5 +161,33 @@ void LevelSystem::render(RenderWindow &window)
 	for (size_t i = 0; i < _width * _height; i++)
 	{
 		window.draw(*_sprites[i]);
+	}
+}
+
+sf::Vector2f LevelSystem::getStartTilePos()
+{
+	for (size_t y = 0; y < LevelSystem::_height; ++y)
+	{
+		for (size_t x = 0; x < LevelSystem::_width; ++x)
+		{
+			if (getTile({x , y}) == START)
+			{
+				return getTilePosition({ x, y });
+			}
+		}
+	}
+}
+
+sf::Vector2f LevelSystem::getEndTilePos()
+{
+	for (size_t y = 0; y < LevelSystem::_height; ++y)
+	{
+		for (size_t x = 0; x < LevelSystem::_width; ++x)
+		{
+			if (getTile({ x , y }) == END)
+			{
+				return getTilePosition({ x, y });
+			}
+		}
 	}
 }

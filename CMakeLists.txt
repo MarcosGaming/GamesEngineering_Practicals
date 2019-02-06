@@ -22,7 +22,7 @@ add_subdirectory("lib/sfml")
 set(SFML_INCS "lib/sfml/include")
 link_directories("${CMAKE_BINARY_DIR}/lib/sfml/lib")
 
-#### Practical 1 ####
+#### PONG ####
 file(GLOB_RECURSE SOURCES practical_1/*.cpp practical_1/*.h)
 add_executable(PRACTICAL_1 ${SOURCES})
 target_include_directories(PRACTICAL_1 PRIVATE ${SFML_INCS})
@@ -34,11 +34,17 @@ add_executable(PRACTICAL_2 ${SOURCES})
 target_include_directories(PRACTICAL_2 SYSTEM PRIVATE ${SFML_INCS})
 set(EXECUTABLES ${EXECUTABLES} PRACTICAL_2)
 
-#### TILE ENGINES####
+#### TILE ENGINES ####
 file(GLOB_RECURSE SOURCES practical_3/*.cpp practical_3/*.h)
 add_executable(PRACTICAL_3 ${SOURCES})
 target_include_directories(PRACTICAL_3 SYSTEM PRIVATE ${SFML_INCS})
 set(EXECUTABLES ${EXECUTABLES} PRACTICAL_3)
+
+#### PACMAN ####
+file(GLOB_RECURSE SOURCES practical_4/*.cpp practical_4/*.h)
+add_executable(PRACTICAL_4 ${SOURCES})
+target_include_directories(PRACTICAL_4 SYSTEM PRIVATE ${SFML_INCS})
+set(EXECUTABLES ${EXECUTABLES} PRACTICAL_4)
 
 #### LINK DEPENDENCIES ####
 foreach(exe ${EXECUTABLES})

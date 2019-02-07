@@ -40,7 +40,7 @@ Component::~Component(){}
 // Deletion method
 bool Component::is_fordeletion() const { return _fordeletion; }
 
-/*void EntityManager::update(double dt)
+void EntityManager::update(double dt)
 {
 	for (int i = 0; i < list.size(); i++)
 	{
@@ -55,4 +55,4 @@ void EntityManager::render(sf::RenderWindow &window)
 	{
 		list[i]->render(window);
 	}
-}*/
+}

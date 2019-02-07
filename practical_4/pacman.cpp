@@ -2,6 +2,9 @@
 #include "system_renderer.h"
 #include "Player.h"
 #include "Ghost.h"
+#include "cmp_sprite.h"
+
+#define GHOST_COUNT 4
 
 // Scene base class
 void Scene::render() { _ents.render(Renderer::getWindow()); }
@@ -39,17 +42,24 @@ void MenuScene::render()
 void GameScene::load()
 {
 	// Player
-	std::shared_ptr<Entity> player = std::make_shared<Player>();
-	_ents.list.push_back(std::move(player));
+	auto player = std::make_shared<Entity>();
+	auto p = player->addComponent<ShapeComponent>();
+	p->setShape<sf::CircleShape>(12.0f);
+	p->getShape().setFillColor(sf::Color::Yellow);
+	p->getShape().setOrigin(sf::Vector2f(12.0f, 12.0f));
+	_ents.list.push_back(player);
+
 	// Ghosts
-	std::shared_ptr<Entity> ghost1 = std::make_shared<Ghost>(sf::Color::Red);
-	_ents.list.push_back(std::move(ghost1));
-	std::shared_ptr<Entity> ghost2 = std::make_shared<Ghost>(sf::Color::Green);
-	_ents.list.push_back(std::move(ghost2));
-	std::shared_ptr<Entity> ghost3 = std::make_shared<Ghost>(sf::Color::Magenta);
-	_ents.list.push_back(std::move(ghost3));
-	std::shared_ptr<Entity> ghost4 = std::make_shared<Ghost>(sf::Color::Blue);
-	_ents.list.push_back(std::move(ghost4));
+	const sf::Color ghost_cols[]{ { 208, 62,25 }, { 219, 133, 28 }, { 70, 191, 238 }, { 234, 130, 229 } };
+	for (int i = 0; i < GHOST_COUNT; i++)
+	{
+		auto ghost = std::make_shared<Entity>();
+		auto g = ghost->addComponent<ShapeComponent>();
+		g->setShape<sf::CircleShape>(12.0f);
+		g->getShape().setFillColor(ghost_cols[i % 4]);
+		g->getShape().setOrigin(sf::Vector2f(12.0f, 12.0f));
+		_ents.list.push_back(ghost);
+	}
 }
 
 void GameScene::update(double dt)

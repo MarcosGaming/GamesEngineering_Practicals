@@ -4,6 +4,7 @@
 #include <memory>
 #include <typeindex>
 #include <vector>
+#include <SFML/Graphics.hpp>
 
 // Forward declare
 class Component;
@@ -34,6 +35,15 @@ public:
 	void setAlive(bool _alive);
 	bool isVisible() const;
 	void setVisible(bool _visible);
+
+	template <typename T, typename... Targs>
+	std::shared_ptr<T> addComponent(Targs... params)
+	{
+		static_assert(std::is_base_of<Component, T>::value, "T != component");
+		std::shared_ptr<T> sp(std::make_shared<T>(this, params...));
+		_components.push_back(sp);
+		return sp;
+	}
 };
 
 // Component class
@@ -52,9 +62,9 @@ public:
 	virtual ~Component();
 };
 
-/*struct EntityManager
+struct EntityManager
 {
 	std::vector<std::shared_ptr<Entity>> list;
 	void update(double dt);
 	void render(sf::RenderWindow &window);
-};*/
+};

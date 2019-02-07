@@ -1,5 +1,5 @@
 #include <SFML/Graphics.hpp>
-#include "Entity.h"
+#include "ecm.h"
 #include "Player.h"
 #include "Ghost.h"
 #include "system_renderer.h"

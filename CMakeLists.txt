@@ -58,7 +58,8 @@ foreach(exe ${EXECUTABLES})
 		optimized sfml-system debug sfml-system-d
 		optimized sfml-graphics debug sfml-graphics-d
 		optimized sfml-main debug sfml-main-d
-		lib_tile_level_loader )
+		lib_tile_level_loader
+		lib_ecm )
 	add_dependencies(${exe} sfml-graphics sfml-audio copy_resources)
 endforeach ()
 
@@ -73,3 +74,8 @@ add_library(lib_maths INTERFACE)
 target_sources(lib_maths INTERFACE "${CMAKE_SOURCE_DIR}/lib_maths/maths.h")
 target_include_directories(lib_maths INTERFACE "${CMAKE_SOURCE_DIR}/lib_maths" SYSTEM INTERFACE "${SFML_INCS}")
 
+### ECM LIBRARY ###
+file(GLOB_RECURSE SOURCE_FILES lib_ecm/*.cpp lib_ecm/*.h)
+add_library(lib_ecm STATIC ${SOURCE_FILES})
+target_include_directories(lib_ecm INTERFACE "${CMAKE_SOURCE_DIR}/lib_ecm")
+target_link_libraries(lib_ecm PRIVATE lib_maths)

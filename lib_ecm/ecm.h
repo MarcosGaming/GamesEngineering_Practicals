@@ -44,15 +44,44 @@ public:
 		_components.push_back(sp);
 		return sp;
 	}
+	template<typename T>
+	const std::vector<std::shared_ptr<T>> getComponents() const
+	{
+		static_assert(std::is_base_of<Component, T>::value, "T != component");
+		std::vector<std::shared_ptr<T>> temp;
+		for (const auto c : _components)
+		{
+			if (typeid(*c) == typeid(T))
+			{
+				temp.push_back(std::dynamic_pointer_cast<T>(c));
+			}
+		}
+		return std::move(temp);
+	}
+	template<typename T>
+	const std::vector<std::shared_ptr<T>> getCompatibleComponents()
+	{
+		static_assert(std::is_base_of<Component, T>::value, "T != component");
+		std::vector<std::shared_ptr<T>> temp;
+		for (auto c : _components)
+		{
+			auto dd = dynamic_cast<T*>(&(*c));
+			if (dd)
+			{
+				temp.push_back(std::dynamic_pointer_cast<T>(c));
+			}
+		}
+		return temp;
+	}
 };
 
 // Component class
 class Component
 {
 protected:
-	const Entity *_parent;
+	Entity *_parent;
 	bool _fordeletion;		
-	explicit Component(const Entity *p);
+	explicit Component(Entity *p);
 
 public:
 	Component() = delete;
@@ -66,5 +95,5 @@ struct EntityManager
 {
 	std::vector<std::shared_ptr<Entity>> list;
 	void update(double dt);
-	void render(sf::RenderWindow &window);
+	void render();
 };

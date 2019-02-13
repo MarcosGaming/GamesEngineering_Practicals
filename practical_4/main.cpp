@@ -1,15 +1,13 @@
 #include <SFML/Graphics.hpp>
 #include "ecm.h"
-#include "Player.h"
-#include "Ghost.h"
 #include "system_renderer.h"
 #include "pacman.h"
 
 using namespace sf;
 using namespace std;
 
-int gameWidth = 800;
-int gameHeight = 600;
+int gameWidth = 700;
+int gameHeight = 800;
 
 std::shared_ptr<Scene> gameScene;
 std::shared_ptr<Scene> menuScene;

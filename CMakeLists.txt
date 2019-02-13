@@ -22,6 +22,11 @@ add_subdirectory("lib/sfml")
 set(SFML_INCS "lib/sfml/include")
 link_directories("${CMAKE_BINARY_DIR}/lib/sfml/lib")
 
+### BOX 2D PHYSICS LIBRARY ###
+add_subdirectory("lib/b2d/Box2D")
+set(B2D_INCS "lib/b2d/Box2D/")
+link_directories("${CMAKE_BINARY_DIR}/lib/sfml/lib")
+
 #### PONG ####
 file(GLOB_RECURSE SOURCES practical_1/*.cpp practical_1/*.h)
 add_executable(PRACTICAL_1 ${SOURCES})
@@ -46,6 +51,12 @@ add_executable(PRACTICAL_4 ${SOURCES})
 target_include_directories(PRACTICAL_4 SYSTEM PRIVATE ${SFML_INCS})
 set(EXECUTABLES ${EXECUTABLES} PRACTICAL_4)
 
+### PHYSICS ###
+file(GLOB_RECURSE SOURCES practical_5/*.cpp practical_5/*.h)
+add_executable(PRACTICAL_5 ${SOURCES})
+target_include_directories(PRACTICAL_5 SYSTEM PRIVATE ${SFML_INCS} ${B2D_INCS})
+set(EXECUTABLES ${EXECUTABLES} PRACTICAL_5)
+
 #### LINK DEPENDENCIES ####
 foreach(exe ${EXECUTABLES})
 	#Set working directory to build dir in visual studio
@@ -59,7 +70,9 @@ foreach(exe ${EXECUTABLES})
 		optimized sfml-graphics debug sfml-graphics-d
 		optimized sfml-main debug sfml-main-d
 		lib_tile_level_loader
-		lib_ecm )
+		lib_ecm
+		lib_renderer
+		b2d)
 	add_dependencies(${exe} sfml-graphics sfml-audio copy_resources)
 endforeach ()
 
@@ -74,8 +87,15 @@ add_library(lib_maths INTERFACE)
 target_sources(lib_maths INTERFACE "${CMAKE_SOURCE_DIR}/lib_maths/maths.h")
 target_include_directories(lib_maths INTERFACE "${CMAKE_SOURCE_DIR}/lib_maths" SYSTEM INTERFACE "${SFML_INCS}")
 
+### RENDERER LIBRARY ###
+file(GLOB_RECURSE SOURCE_FILES lib_renderer/*.cpp lib_renderer/*.h)
+add_library(lib_renderer STATIC ${SOURCE_FILES})
+target_include_directories(lib_renderer INTERFACE "${CMAKE_SOURCE_DIR}/lib_renderer")
+target_link_libraries(lib_renderer PRIVATE lib_maths)
+
 ### ECM LIBRARY ###
 file(GLOB_RECURSE SOURCE_FILES lib_ecm/*.cpp lib_ecm/*.h)
 add_library(lib_ecm STATIC ${SOURCE_FILES})
 target_include_directories(lib_ecm INTERFACE "${CMAKE_SOURCE_DIR}/lib_ecm")
-target_link_libraries(lib_ecm PRIVATE lib_maths)
+target_link_libraries(lib_ecm PRIVATE lib_maths lib_renderer)
+

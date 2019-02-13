@@ -2,7 +2,7 @@
 #include "system_renderer.h"
 #include <queue>
 
-static std::queue<const sf::Drawable *> sprites;
+static std::queue<const sf::Drawable *> drawables;
 static sf::RenderWindow *rw;
 
 void Renderer::initialise(sf::RenderWindow &r) { rw = &r; }
@@ -11,13 +11,11 @@ sf::RenderWindow &Renderer::getWindow() { return *rw; }
 
 void Renderer::shutdown()
 {
-	while (!sprites.empty())
+	while (!drawables.empty())
 	{
-		sprites.pop();
+		drawables.pop();
 	}
 }
-
-void Renderer::update(const double &){}
 
 void Renderer::render()
 {
@@ -25,11 +23,11 @@ void Renderer::render()
 	{
 		throw("No render window set!");
 	}
-	while (!sprites.empty())
+	while (!drawables.empty())
 	{
-		rw->draw(*sprites.front());
-		sprites.pop();
+		rw->draw(*drawables.front());
+		drawables.pop();
 	}
 }
 
-void Renderer::queue(const sf::Drawable *s) { sprites.push(s); }
+void Renderer::queue(const sf::Drawable *s) { drawables.push(s); }

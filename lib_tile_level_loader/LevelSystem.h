@@ -31,6 +31,10 @@ public:
 	static sf::Vector2f getStartTilePos();
 	// Return end tile position
 	static sf::Vector2f getEndTilePos();
+	// Return any tile position
+	static std::vector<sf::Vector2f> findTilesPosition(TILE t);
+	// Find tiles
+	static std::vector<sf::Vector2ul> findTiles(TILE t);
 
 protected:
 	static std::unique_ptr<TILE[]> _tiles;		// Internal array of tiles

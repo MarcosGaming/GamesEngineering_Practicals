@@ -124,9 +124,9 @@ sf::Vector2f LevelSystem::getTilePosition(sf::Vector2ul p)
 void LevelSystem::buildSprites()
 {
 	_sprites.clear();
-	for (size_t y = 0; y < LevelSystem::_height; ++y)
+	for (size_t y = 0; y < LevelSystem::getHeight(); ++y)
 	{
-		for (size_t x = 0; x < LevelSystem::_width; ++x)
+		for (size_t x = 0; x < LevelSystem::getWidth(); ++x)
 		{
 			auto s = make_unique<sf::RectangleShape>();
 			s->setPosition(getTilePosition({ x, y }));
@@ -190,4 +190,37 @@ sf::Vector2f LevelSystem::getEndTilePos()
 			}
 		}
 	}
+}
+
+
+std::vector<sf::Vector2f> LevelSystem::findTilesPosition(TILE t)
+{
+	std::vector<sf::Vector2f> ret;
+	for (size_t y = 0; y < LevelSystem::_height; ++y)
+	{
+		for (size_t x = 0; x < LevelSystem::_width; ++x)
+		{
+			if (getTile({ x , y }) == t)
+			{
+				ret.push_back(getTilePosition({ x, y }));
+			}
+		}
+	}
+	return ret;
+}
+
+std::vector<sf::Vector2ul> LevelSystem::findTiles(TILE t)
+{
+	std::vector<sf::Vector2ul> ret;
+	for (size_t y = 0; y < LevelSystem::_height; ++y)
+	{
+		for (size_t x = 0; x < LevelSystem::_width; ++x)
+		{
+			if (getTile({ x , y }) == t)
+			{
+				ret.push_back(sf::Vector2ul{ x, y });
+			}
+		}
+	}
+	return ret;
 }

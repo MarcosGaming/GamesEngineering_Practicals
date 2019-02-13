@@ -1,4 +1,4 @@
-#include "cmp_sprite.h"
+#include "cmp_shape.h"
 #include "system_renderer.h"
 
 // Constructor

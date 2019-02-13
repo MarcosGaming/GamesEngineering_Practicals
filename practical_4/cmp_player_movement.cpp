@@ -1,17 +1,10 @@
-#include "Player.h"
+#include "cmp_player_movement.h"
 
 // Constructor
-Player::Player() : _speed(200.0f), Entity(std::make_unique<sf::CircleShape>(25.0f))
-{
-	_shape->setFillColor(sf::Color::Yellow);
-	_shape->setOrigin(sf::Vector2f(25.0f, 25.0f));
-}
-
-// Render
-void Player::render(sf::RenderWindow &window) const { window.draw(*_shape); }
+PlayerMovementComponent::PlayerMovementComponent(Entity *p) : ActorMovementComponent(p){}
 
 // Update
-void Player::update(double dt)
+void PlayerMovementComponent::update(double dt)
 {
 	// Directions
 	float directionY = 0.0f;
@@ -34,6 +27,4 @@ void Player::update(double dt)
 	}
 
 	move(sf::Vector2f(dt * directionX * _speed, dt * directionY * _speed));
-	
-	Entity::update(dt);
 }

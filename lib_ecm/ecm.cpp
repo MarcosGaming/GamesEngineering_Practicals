@@ -4,11 +4,26 @@
 //Constructor
 Entity::Entity(){}
 
+// Destructor
+Entity::~Entity() {}
+
 // Update method
-void Entity::update(double dt) { }
+void Entity::update(double dt) 
+{
+	for (int i = 0; i < _components.size(); i++)
+	{
+		_components[i]->update(dt);
+	}
+}
 
 // Render methods
-void Entity::render(){}
+void Entity::render()
+{
+	for (int i = 0; i < _components.size(); i++)
+	{
+		_components[i]->render();
+	}
+}
 
 // Position methods
 const sf::Vector2f &Entity::getPosition() const { return _position; }
@@ -32,7 +47,7 @@ void Entity::setVisible(bool vis) { _visible = vis; }
 
 // Component class
 // Constructor
-Component::Component(const Entity *p) { _parent = p; }
+Component::Component(Entity *p) { _parent = p; }
 
 // Destructor
 Component::~Component(){}
@@ -40,6 +55,9 @@ Component::~Component(){}
 // Deletion method
 bool Component::is_fordeletion() const { return _fordeletion; }
 
+
+//EntityManager
+//EntityManager update
 void EntityManager::update(double dt)
 {
 	for (int i = 0; i < list.size(); i++)
@@ -49,10 +67,10 @@ void EntityManager::update(double dt)
 }
 
 // EntityManager render
-void EntityManager::render(sf::RenderWindow &window)
+void EntityManager::render()
 {
 	for (int i = 0; i < list.size(); i++)
 	{
-		list[i]->render(window);
+		list[i]->render();
 	}
 }

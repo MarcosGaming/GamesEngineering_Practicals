@@ -7,9 +7,12 @@ project(Games_Engineering)
 
 #### Setup Directories ####
 #Main output directory
+
 SET(OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/")
 # Ouput all DLLs from all libs into main build folder
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_DIRECTORY})
+SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${OUTPUT_DIRECTORY})
+
 #Resources
 add_custom_target(copy_resources ALL COMMAND ${CMAKE_COMMAND} 
   -E copy_directory
@@ -25,7 +28,7 @@ link_directories("${CMAKE_BINARY_DIR}/lib/sfml/lib")
 ### BOX 2D PHYSICS LIBRARY ###
 add_subdirectory("lib/b2d/Box2D")
 set(B2D_INCS "lib/b2d/Box2D/")
-link_directories("${CMAKE_BINARY_DIR}/lib/sfml/lib")
+#link_directories("${CMAKE_BINARY_DIR}/lib/sfml/lib")
 
 #### PONG ####
 file(GLOB_RECURSE SOURCES practical_1/*.cpp practical_1/*.h)
@@ -72,7 +75,7 @@ foreach(exe ${EXECUTABLES})
 		lib_tile_level_loader
 		lib_ecm
 		lib_renderer
-		b2d)
+		Box2D)
 	add_dependencies(${exe} sfml-graphics sfml-audio copy_resources)
 endforeach ()
 

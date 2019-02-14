@@ -118,7 +118,7 @@ void LevelSystem::loadLevelFile(const std::string& path, float tileSize)
 
 sf::Vector2f LevelSystem::getTilePosition(sf::Vector2ul p)
 {
-	return (Vector2f(p.x, p.y) * _tileSize);
+	return (Vector2f(p.x, p.y) * _tileSize) + _offset;
 }
 
 void LevelSystem::buildSprites()

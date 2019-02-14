@@ -23,7 +23,7 @@ void EnemyAIComponent::update(double dt)
 	{
 	case ROAMING:
 		// Wall in front or waypoint
-		if (ls::getTileAt(next_pos) == ls::WALL || ls::getTileAt(next_pos) == ls::WAYPOINT)
+		if (ls::getTileAt(next_pos) == ls::WALL || ls::getTileAt(current_pos) == ls::WALL || ls::getTileAt(next_pos) == ls::WAYPOINT && ls::getTileAt(current_pos) != ls::WAYPOINT)
 		{
 			// Start rotate
 			_state = ROTATING;
@@ -38,7 +38,7 @@ void EnemyAIComponent::update(double dt)
 
 	case ROTATING:
 		// New direction needs to be different from bad direction and can't lead to a wall
-		while (new_direction == bad_direction || ls::getTileAt(current_pos + sf::Vector2f(new_direction) * mva) == ls::WALL)
+		while (new_direction == bad_direction || ls::getTileAt(current_pos + (sf::Vector2f(new_direction) * mva)) == ls::WALL)
 		{
 			// Set new direction
 			new_direction = directions[(rand() % 4)];
@@ -49,11 +49,23 @@ void EnemyAIComponent::update(double dt)
 
 	case ROTATED:
 		// Check if the AI has left the way point
-		if (ls::getTileAt(current_pos) != ls::WAYPOINT)
+		if (ls::getTileAt(current_pos) != ls::WAYPOINT || ls::getTileAt(current_pos) != ls::WALL)
 		{
 			_state = ROAMING;
 		}
 		move(_direction * mva);
 		break;
+	}
+	if (_state == ROAMING)
+	{
+		std::cout << "I am ROAMING" << std::endl;
+	}
+	if (_state == ROTATING)
+	{
+		std::cout << "I am ROTATING" << std::endl;
+	}
+	if (_state == ROTATED)
+	{
+		std::cout << "I am ROTATED" << std::endl;
 	}
 }

@@ -116,10 +116,25 @@ void init()
 	}
 }
 
-void Update()
+void Update(sf::RenderWindow &window)
 {
 	static sf::Clock clock;
 	float dt = clock.restart().asSeconds();
+	// Check and consume events
+	sf::Event event;
+	while (window.pollEvent(event))
+	{
+		if (event.type == sf::Event::Closed)
+		{
+			window.close();
+			return;
+		}
+	}
+	// Quit Via ESC Key
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+	{
+		window.close();
+	}
 	// Step physics world by dt
 	world->Step(dt, velocity_iterations, position_iterations);
 
@@ -147,7 +162,7 @@ int main()
 	while (window.isOpen())
 	{
 		window.clear();
-		Update();
+		Update(window);
 		Render(window);
 		window.display();
 	}

@@ -21,7 +21,7 @@ std::shared_ptr<Entity> makeCherry(const sf::Vector2ul& cl, float multiplier, Sc
 	std::shared_ptr<ShapeComponent> c = cherry->addComponent<ShapeComponent>();
 	c->setShape<sf::CircleShape>(5.0f);
 	c->getShape().setFillColor(sf::Color::Red);
-	c->getShape().setOrigin(sf::Vector2f(12.0f, 12.0f));
+	c->getShape().setOrigin(sf::Vector2f(5.0f, 5.0f));
 	std::shared_ptr<PickUpComponent> pick = cherry->addComponent<PickUpComponent>();
 	pick->_multiplier = multiplier;
 	pick->_ents = scene.getEnts();
@@ -70,8 +70,8 @@ void GameScene::load()
 	std::shared_ptr<ShapeComponent> p = player->addComponent<ShapeComponent>();
 	p->setShape<sf::CircleShape>(12.0f);
 	p->getShape().setFillColor(sf::Color::Yellow);
-	p->getShape().setOrigin(sf::Vector2f(12.0f, 40.0f));
-	player->setPosition((ls::getTilePosition(ls::findTiles(ls::START)[0]) - (sf::Vector2f(0.0f, -40.0f))));
+	p->getShape().setOrigin(sf::Vector2f(12.0f, 12.0f));
+	player->setPosition((ls::getTilePosition(ls::findTiles(ls::START)[0])));
 	player->getCompatibleComponents<ActorMovementComponent>()[0]->setSpeed(150.0f);
 	_ents.list.push_back(player);
 
@@ -83,11 +83,11 @@ void GameScene::load()
 	{
 		std::shared_ptr<Entity> ghost = std::make_shared<Entity>();
 		ghost->addComponent<EnemyAIComponent>();
-		ghost->setPosition(ls::getTilePosition(ghost_spawns[rand() % ghost_spawns.size()]) - (sf::Vector2f(0.0f, -40.0f)));
+		ghost->setPosition(ls::getTilePosition(ghost_spawns[rand() % ghost_spawns.size()]));
 		std::shared_ptr<ShapeComponent> g = ghost->addComponent<ShapeComponent>();
 		g->setShape<sf::CircleShape>(12.0f);
 		g->getShape().setFillColor(ghost_cols[i % 4]);
-		g->getShape().setOrigin(sf::Vector2f(12.0f, 40.0f));
+		g->getShape().setOrigin(sf::Vector2f(12.0f, 12.0f));
 		ghost->getCompatibleComponents<ActorMovementComponent>()[0]->setSpeed(100.0f);
 		_ents.list.push_back(ghost);
 		ghosts.push_back(ghost);
@@ -120,13 +120,13 @@ void GameScene::render()
 
 void GameScene::respawn()
 {
-	player->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]) - (sf::Vector2f(0.0f, -40.0f)));
+	player->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 	player->getCompatibleComponents<ActorMovementComponent>()[0]->setSpeed(150.0f);
 
 	auto ghost_spawns = ls::findTiles(ls::ENEMY);
 	for (auto& ghost : ghosts)
 	{
-		ghost->setPosition(ls::getTilePosition(ghost_spawns[rand() % ghost_spawns.size()]) - (sf::Vector2f(0.0f, -40.0f)));
+		ghost->setPosition(ls::getTilePosition(ghost_spawns[rand() % ghost_spawns.size()]));
 		ghost->getCompatibleComponents<ActorMovementComponent>()[0]->setSpeed(100.0f);
 	}
 

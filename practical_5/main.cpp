@@ -3,7 +3,7 @@
 
 // World
 b2World *world;
-// 1 SFML unit = 30 physics units
+// 1 physics units = 30 SFML unit
 const float physics_scale = 30.0f;
 // Inverse of physics scale
 const float physics_scale_inv = 1.0f / physics_scale;

@@ -60,6 +60,16 @@ add_executable(PRACTICAL_5 ${SOURCES})
 target_include_directories(PRACTICAL_5 SYSTEM PRIVATE ${SFML_INCS} ${B2D_INCS})
 set(EXECUTABLES ${EXECUTABLES} PRACTICAL_5)
 
+### PLATFORMER ###
+file(GLOB_RECURSE SOURCES practical_6/*.cpp practical_6/*.h)
+file(GLOB_RECURSE CMPNTS practical_6/components/*.cpp practical_6/components/*.h)
+file(GLOB_RECURSE SCENES practical_6/scenes/*.cpp practical_6/scenes/*.h)
+add_executable(PRACTICAL_6 ${SOURCES} ${RESOURCE_FILES})
+source_group("components" FILES ${CMPNTS})
+source_group("resources" FILES ${RESOURCE_FILES})
+target_include_directories(PRACTICAL_6 SYSTEM PRIVATE ${SFML_INCS} ${B2D_INCS})
+set(EXECUTABLES ${EXECUTABLES} PRACTICAL_6)
+
 #### LINK DEPENDENCIES ####
 foreach(exe ${EXECUTABLES})
 	#Set working directory to build dir in visual studio
@@ -75,7 +85,8 @@ foreach(exe ${EXECUTABLES})
 		lib_tile_level_loader
 		lib_ecm
 		lib_renderer
-		Box2D)
+		Box2D
+		lib_engine)
 	add_dependencies(${exe} sfml-graphics sfml-audio copy_resources)
 endforeach ()
 
@@ -90,11 +101,11 @@ add_library(lib_maths INTERFACE)
 target_sources(lib_maths INTERFACE "${CMAKE_SOURCE_DIR}/lib_maths/maths.h")
 target_include_directories(lib_maths INTERFACE "${CMAKE_SOURCE_DIR}/lib_maths" SYSTEM INTERFACE "${SFML_INCS}")
 
-### RENDERER LIBRARY ###
-file(GLOB_RECURSE SOURCE_FILES lib_renderer/*.cpp lib_renderer/*.h)
-add_library(lib_renderer STATIC ${SOURCE_FILES})
-target_include_directories(lib_renderer INTERFACE "${CMAKE_SOURCE_DIR}/lib_renderer")
-target_link_libraries(lib_renderer PRIVATE lib_maths)
+### ENGINE LIBRARY ###
+file(GLOB_RECURSE SOURCE_FILES engine/*.cpp engine/*.h)
+add_library(lib_engine STATIC ${SOURCE_FILES} ${RESOURCE_FILES})
+target_include_directories(lib_engine INTERFACE "${CMAKE_SOURCE_DIR}/engine/" PUBLIC SYSTEM ${B2D_INCS} )
+target_link_libraries(lib_engine lib_tile_level_loader lib_maths lib_ecm Box2D sfml-graphics sfml-audio)
 
 ### ECM LIBRARY ###
 file(GLOB_RECURSE SOURCE_FILES lib_ecm/*.cpp lib_ecm/*.h)

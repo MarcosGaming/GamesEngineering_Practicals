@@ -84,7 +84,6 @@ foreach(exe ${EXECUTABLES})
 		optimized sfml-main debug sfml-main-d
 		lib_tile_level_loader
 		lib_ecm
-		lib_renderer
 		Box2D
 		lib_engine)
 	add_dependencies(${exe} sfml-graphics sfml-audio copy_resources)
@@ -111,5 +110,5 @@ target_link_libraries(lib_engine lib_tile_level_loader lib_maths lib_ecm Box2D s
 file(GLOB_RECURSE SOURCE_FILES lib_ecm/*.cpp lib_ecm/*.h)
 add_library(lib_ecm STATIC ${SOURCE_FILES})
 target_include_directories(lib_ecm INTERFACE "${CMAKE_SOURCE_DIR}/lib_ecm")
-target_link_libraries(lib_ecm PRIVATE lib_maths lib_renderer)
+target_link_libraries(lib_ecm PRIVATE lib_maths)
 

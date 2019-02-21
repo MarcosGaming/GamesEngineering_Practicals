@@ -11,9 +11,7 @@ void PhysicsComponent::update(double dt) {
   _parent->setRotation((180 / b2_pi) * _body->GetAngle());
 }
 
-PhysicsComponent::PhysicsComponent(Entity* p, bool dyn,
-                                   const Vector2f& size)
-    : Component(p), _dynamic(dyn) {
+PhysicsComponent::PhysicsComponent(Entity* p, bool dyn, const Vector2f& size) : Component(p), _dynamic(dyn) {
 
   b2BodyDef BodyDef;
   // Is Dynamic(moving), or static(Stationary)

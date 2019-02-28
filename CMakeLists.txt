@@ -70,6 +70,17 @@ source_group("resources" FILES ${RESOURCE_FILES})
 target_include_directories(PRACTICAL_6 SYSTEM PRIVATE ${SFML_INCS} ${B2D_INCS})
 set(EXECUTABLES ${EXECUTABLES} PRACTICAL_6)
 
+### AI STEERING AND PATHFINDING"
+file(GLOB_RECURSE SOURCES practical_7/*.cpp practical_7/*.h)
+file(GLOB_RECURSE CMPNTS practical_7/components/*.cpp practical_7/components/*.h)
+file(GLOB_RECURSE SCENES practical_7/scenes/*.cpp practical_7/scenes/*.h)
+add_executable(PRACTICAL_7 ${SOURCES} ${CMPNTS} ${SCENES} ${RESOURCE_FILES})
+source_group("components" FILES ${CMPNTS})
+source_group("resources" FILES ${RESOURCE_FILES})
+source_group("scenes" FILES ${SCENES})
+target_include_directories(PRACTICAL_7 SYSTEM PRIVATE ${SFML_INCS} ${B2D_INCS})
+set(EXECUTABLES ${EXECUTABLES} PRACTICAL_7)
+
 #### LINK DEPENDENCIES ####
 foreach(exe ${EXECUTABLES})
 	#Set working directory to build dir in visual studio

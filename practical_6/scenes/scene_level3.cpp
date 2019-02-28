@@ -1,6 +1,7 @@
 #include "scene_level3.h"
 #include "../components/cmp_physics.h"
 #include "../components/cmp_player_physics.h"
+#include "../components/cmp_hurt_player.h"
 #include "../game.h"
 #include "../components/cmp_bullet.h"
 #include <LevelSystem.h>
@@ -19,29 +20,30 @@ void Level3Scene::Load() {
   // Create player
   {
     // *********************************
+	  player = makeEntity();
+	  player->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
+	  auto s = player->addComponent<ShapeComponent>();
+	  s->setShape<RectangleShape>(Vector2f(20.0f, 30.0f));
+	  s->getShape().setFillColor(Color::Magenta);
+	  s->getShape().setOrigin(Vector2f(10.0f, 15.0f));
 
-
+	  player->addComponent<PlayerPhysicsComponent>(Vector2f(20.0f, 30.0f));
     // pl->setPosition({100, 100});
-
-
-
-
-
-
     // *********************************
   }
 
   // Add physics colliders to level tiles.
   {
     // *********************************
-
-
-
-
-
-
-
-
+	  auto walls = ls::findTiles(ls::WALL);
+	  for (auto w : walls)
+	  {
+		  auto pos = ls::getTilePosition(w);
+		  pos += Vector2f(20.0f, 20.0f);
+		  auto e = makeEntity();
+		  e->setPosition(pos);
+		  e->addComponent<PhysicsComponent>(false, Vector2f(40.0f, 40.0f));
+	  }
     // *********************************
   }
 

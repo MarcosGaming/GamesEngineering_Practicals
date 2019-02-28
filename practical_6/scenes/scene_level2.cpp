@@ -20,12 +20,12 @@ void Level2Scene::Load() {
   // Create player
   {
     // *********************************
-
-
-
-
-
-
+	  player = makeEntity();
+	  player->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
+	  auto shape = player->addComponent<ShapeComponent>();
+	  shape->setShape<sf::RectangleShape>(Vector2f(20.0f, 30.0f));
+	  shape->getShape().setFillColor(Color::Magenta);
+	  shape->getShape().setOrigin(10.0f, 15.0f);
     // *********************************
     player->addTag("player");
     player->addComponent<PlayerPhysicsComponent>(Vector2f(20.f, 30.f));
@@ -38,14 +38,15 @@ void Level2Scene::Load() {
                        Vector2f(0, 24));
     // *********************************
     // Add HurtComponent
-
+	enemy->addComponent<HurtComponent>();
     // Add ShapeComponent, Red 16.f Circle
-
-
-
+	auto s = enemy->addComponent<ShapeComponent>();
+	s->setShape<sf::CircleShape>(16.0f);
+	s->getShape().setFillColor(Color::Red);
+	s->getShape().setOrigin(Vector2f(8.0f, 8.0f));
 
     // Add EnemyAIComponent
-
+	enemy->addComponent<EnemyAIComponent>();
     // *********************************
   }
 
@@ -64,14 +65,15 @@ void Level2Scene::Load() {
   // Add physics colliders to level tiles.
   {
     // *********************************
-
-
-
-
-
-
-
-
+	  auto walls = ls::findTiles(ls::WALL);
+	  for (auto w : walls)
+	  {
+		  auto pos = ls::getTilePosition(w);
+		  pos += Vector2f(20.0f, 20.0f);
+		  auto e = makeEntity();
+		  e->setPosition(pos);
+		  e->addComponent<PhysicsComponent>(false, Vector2f(40.0f, 40.0f));
+	  }
     // *********************************
   }
 

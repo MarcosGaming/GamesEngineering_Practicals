@@ -70,7 +70,7 @@ source_group("resources" FILES ${RESOURCE_FILES})
 target_include_directories(PRACTICAL_6 SYSTEM PRIVATE ${SFML_INCS} ${B2D_INCS})
 set(EXECUTABLES ${EXECUTABLES} PRACTICAL_6)
 
-### AI STEERING AND PATHFINDING"
+### AI STEERING AND PATHFINDING ###
 file(GLOB_RECURSE SOURCES practical_7/*.cpp practical_7/*.h)
 file(GLOB_RECURSE CMPNTS practical_7/components/*.cpp practical_7/components/*.h)
 file(GLOB_RECURSE SCENES practical_7/scenes/*.cpp practical_7/scenes/*.h)
@@ -80,6 +80,18 @@ source_group("resources" FILES ${RESOURCE_FILES})
 source_group("scenes" FILES ${SCENES})
 target_include_directories(PRACTICAL_7 SYSTEM PRIVATE ${SFML_INCS} ${B2D_INCS})
 set(EXECUTABLES ${EXECUTABLES} PRACTICAL_7)
+
+### AI STATES AND DECISIONS ###
+file(GLOB_RECURSE SOURCES practical_8/*.cpp practical_8/*.h)
+file(GLOB_RECURSE CMPNTS practical_8/components/*.cpp practical_8/components/*.h)
+file(GLOB_RECURSE SCENES practical_8/scenes/*.cpp practical_8/scenes/*.h)
+add_executable(PRACTICAL_8 ${SOURCES} ${CMPNTS} ${SCENES} ${RESOURCE_FILES})
+source_group("components" FILES ${CMPNTS})
+source_group("resources" FILES ${RESOURCE_FILES})
+source_group("scenes" FILES ${SCENES})
+target_include_directories(PRACTICAL_8 SYSTEM PRIVATE ${SFML_INCS} ${B2D_INCS})
+set(EXECUTABLES ${EXECUTABLES} PRACTICAL_8)
+
 
 #### LINK DEPENDENCIES ####
 foreach(exe ${EXECUTABLES})

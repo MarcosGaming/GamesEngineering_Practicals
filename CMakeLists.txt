@@ -92,6 +92,11 @@ source_group("scenes" FILES ${SCENES})
 target_include_directories(PRACTICAL_8 SYSTEM PRIVATE ${SFML_INCS} ${B2D_INCS})
 set(EXECUTABLES ${EXECUTABLES} PRACTICAL_8)
 
+### DEPLOYMENT ###
+file(GLOB_RECURSE SOURCES practical_9/*.cpp practical_9/*.h)
+add_executable(PRACTICAL_9 ${SOURCES} ${RESOURCE_FILES})
+set(EXECUTABLES ${EXECUTABLES} PRACTICAL_9)
+
 
 #### LINK DEPENDENCIES ####
 foreach(exe ${EXECUTABLES})
